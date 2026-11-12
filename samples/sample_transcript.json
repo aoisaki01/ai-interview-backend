@@ -1,0 +1,32 @@
+[
+  {
+    "speaker": "agent",
+    "text": "Halo Budi, terima kasih sudah meluangkan waktu hari ini. Saya sudah membaca CV kamu untuk posisi Backend Engineer. Bisa ceritakan singkat pengalaman kamu di PT FinTech Nusantara, khususnya waktu menurunkan latency p99 dari 420ms ke 85ms?",
+    "timestamp": "2026-11-12T10:00:05Z"
+  },
+  {
+    "speaker": "user",
+    "text": "Halo, terima kasih. Jadi di FinTech Nusantara saya pegang service payment gateway pakai Rust Axum. Masalah awalnya query PostgreSQL melakukan join berulang di endpoint checkout dan tiap request bikin koneksi baru tanpa pool yang optimal. Saya ubah pakai sqlx pool tuning, pindahkan data merchant config ke Redis dengan TTL 5 menit, dan pisahkan audit log ke async worker. Hasilnya p99 turun dari sekitar 420 milidetik ke 85 milidetik saat load test 1500 RPS.",
+    "timestamp": "2026-11-12T10:00:48Z"
+  },
+  {
+    "speaker": "agent",
+    "text": "Menarik, penjelasannya cukup jelas. Saat pakai Redis dengan TTL 5 menit, bagaimana kamu menangani kondisi kalau merchant mengubah konfigurasi atau status aktifnya sebelum TTL habis?",
+    "timestamp": "2026-11-12T10:01:02Z"
+  },
+  {
+    "speaker": "user",
+    "text": "Setiap ada update di dashboard merchant, service admin akan publish event atau langsung memanggil cache invalidation untuk menghapus key merchant tersebut di Redis, jadi tidak perlu tunggu 5 menit. Kalau Redis sempat down, fallback-nya langsung query ke read replica PostgreSQL.",
+    "timestamp": "2026-11-12T10:01:36Z"
+  },
+  {
+    "speaker": "agent",
+    "text": "Di CV kamu juga menulis merancang idempotency key di PT Cloud Karya. Bisa jelaskan mekanisme race condition yang mungkin terjadi dan cara kamu mencegahnya?",
+    "timestamp": "2026-11-12T10:01:50Z"
+  },
+  {
+    "speaker": "user",
+    "text": "Kalau dua request datang bersamaan dengan idempotency key yang sama, kita pakai Redis SET NX atau unique constraint di tabel PostgreSQL. Jadi yang pertama dapat lock, memproses pembayaran, lalu simpan response-nya. Request kedua yang datang bersamaan bakal kena conflict atau menunggu lalu dapat response yang sama tanpa memproses ulang.",
+    "timestamp": "2026-11-12T10:02:25Z"
+  }
+]

@@ -1,0 +1,27 @@
+[package]
+name = "ai_interview"
+version = "0.1.0"
+edition = "2021"
+description = "Pure Rust real-time AI Interviewer using ElevenLabs Conversational AI with CV-based summary and explanation clarity scoring"
+
+[[bin]]
+name = "ai-interview"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0"
+axum = { version = "0.8", features = ["ws", "multipart"] }
+base64 = "0.22"
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4.5", features = ["derive"] }
+cpal = "0.15"
+dotenvy = "0.15"
+futures-util = "0.3"
+pdf-extract = "0.7"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.42", features = ["full"] }
+tokio-tungstenite = { version = "0.24", features = ["rustls-tls-webpki-roots"] }
+tower-http = { version = "0.6", features = ["cors"] }
+urlencoding = "2.1"

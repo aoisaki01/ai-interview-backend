@@ -1,0 +1,26 @@
+# Rust compilation output
+/target
+**/*.rs.bk
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Runtime persistence & reports
+/data/store.json
+/reports/*
+!/reports/.gitkeep
+
+# Executables & binaries
+*.exe
+*.dll
+*.so
+*.dylib
+
+# IDE & OS files
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
